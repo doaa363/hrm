@@ -9,14 +9,18 @@ const auditLog = (action, targetModel = null) => (req, res, next) => {
     // Only log successful responses
     if (res.statusCode < 400 && req.user) {
       try {
+        const currentTime = new Date().toLocaleString('ar-EG');
+        const actionAr = action === 'CREATE' ? 'بإنشاء' : action === 'UPDATE' ? 'بتعديل' : 'بحذف';
+        const modelAr = targetModel || 'سجل';
+        
         await AuditLog.create({
           performedBy: req.user.id,
           performedByName: req.user.name || 'Unknown',
           action,
           targetModel,
           targetId: req.params?.id || data?._id || null,
-          details: `${action} by user ${req.user.id} on ${targetModel || 'resource'}`,
-          ipAddress: req.ip || req.headers['x-forwarded-for'],
+          details: `المسؤول [${req.user.name || 'Unknown'}] قام ${actionAr} [${modelAr}] في تمام الساعة [${currentTime}]`,
+          ipAddress: req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress,
         });
       } catch (e) {
         console.error('Audit log error:', e.message);

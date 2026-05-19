@@ -74,7 +74,7 @@ function SettingsPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
-  const [currentView, setCurrentView] = useState('manager')
+  const currentView = user?.role === 'manager' || user?.role === 'admin' ? 'manager' : 'employee'
   const [profile, setProfile] = useState({ name: 'Admin User', email: 'admin@company.com', phone: '+966 50 000 0000', jobRole: 'Admin' })
   const [saved, setSaved] = useState(false)
 
@@ -153,16 +153,9 @@ function SettingsPage() {
         {/* Header */}
         <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex gap-2">
-            <button
-              onClick={() => { setCurrentView('manager'); setActiveTab('profile') }}
-              className={`px-4 py-1.5 text-sm font-medium rounded-md shadow-sm transition ${
-                currentView === 'manager' ? 'bg-[#1e293b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}>Manager View</button>
-            <button
-              onClick={() => { setCurrentView('employee'); setActiveTab('profile') }}
-              className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${
-                currentView === 'employee' ? 'bg-[#1e293b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}>Employee View</button>
+            <span className="px-4 py-1.5 text-sm font-medium rounded-md shadow-sm transition bg-[#1e293b] text-white">
+              {currentView === 'manager' ? 'Manager View' : 'Employee View'}
+            </span>
           </div>
           <div className="w-9 h-9 bg-indigo-900 text-white flex items-center justify-center rounded-full font-bold shadow-sm uppercase">
             {user?.name?.[0] || user?.email?.[0] || 'A'}

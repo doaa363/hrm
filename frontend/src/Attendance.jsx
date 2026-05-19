@@ -1,13 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { LayoutDashboard, Users, Calendar, FileText, Settings, LogOut, HelpCircle, CheckCircle2, XCircle, Clock } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext.jsx'
+import { TableSkeleton } from './components/Skeleton.jsx'
 
 function Attendance() {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const [currentView, setCurrentView] = useState('manager')
+  const currentView = user?.role === 'manager' || user?.role === 'admin' ? 'manager' : 'employee'
   const [filter, setFilter] = useState('All')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [])
 
   const attendanceRecords = [
     { id: 1, name: 'Ahmed Mohamed Ali', role: 'Software Development Manager', dept: 'Information Technology', date: '2026-05-12', checkIn: '08:55 AM', checkOut: '05:10 PM', hours: '8.25', status: 'Present' },
@@ -81,8 +90,9 @@ function Attendance() {
         {/* Header */}
         <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex gap-2">
-            <button onClick={() => setCurrentView('manager')} className={`px-4 py-1.5 text-sm font-medium rounded-md shadow-sm transition ${currentView === 'manager' ? 'bg-[#1e293b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Manager View</button>
-            <button onClick={() => setCurrentView('employee')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${currentView === 'employee' ? 'bg-[#1e293b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Employee View</button>
+            <span className="px-4 py-1.5 text-sm font-medium rounded-md shadow-sm transition bg-[#1e293b] text-white">
+              {currentView === 'manager' ? 'Manager View' : 'Employee View'}
+            </span>
           </div>
           <div className="w-9 h-9 bg-indigo-900 text-white flex items-center justify-center rounded-full font-bold shadow-sm uppercase">
             {user?.name?.[0] || user?.email?.[0] || 'A'}
@@ -126,22 +136,25 @@ function Attendance() {
         </div>
 
         {/* Attendance Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-50 text-gray-500 font-medium text-sm border-b border-gray-100">
-                <th className="p-4 text-left pl-6">Employee</th>
-                <th className="p-4 text-left">Department</th>
-                <th className="p-4 text-left">Date</th>
-                <th className="p-4 text-left">Check In</th>
-                <th className="p-4 text-left">Check Out</th>
-                <th className="p-4 text-left">Hours</th>
-                <th className="p-4 text-left">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-              {filtered.map((rec) => (
-                <tr key={rec.id} className="hover:bg-slate-50 transition">
+        {loading ? (
+          <TableSkeleton rows={6} cols={7} />
+        ) : (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-50 text-gray-500 font-medium text-sm border-b border-gray-100">
+                  <th className="p-4 text-left pl-6">Employee</th>
+                  <th className="p-4 text-left">Department</th>
+                  <th className="p-4 text-left">Date</th>
+                  <th className="p-4 text-left">Check In</th>
+                  <th className="p-4 text-left">Check Out</th>
+                  <th className="p-4 text-left">Hours</th>
+                  <th className="p-4 text-left">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
+                {filtered.map((rec) => (
+                  <tr key={rec.id} className="hover:bg-slate-50 transition">
                   <td className="p-4 pl-6">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center font-bold text-sm">
@@ -163,14 +176,17 @@ function Attendance() {
                       {statusIcon(rec.status)} {rec.status}
                     </span>
                   </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {filtered.length === 0 && (
-            <div className="text-center py-12 text-gray-400">No records found.</div>
-          )}
-        </div>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {filtered.length === 0 && (
+              <div className="text-center py-12 text-gray-400">
+                No attendance records found.
+              </div>
+            )}
+          </div>
+        )}
       </main>
     </div>
   )

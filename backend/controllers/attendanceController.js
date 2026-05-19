@@ -23,6 +23,11 @@ exports.checkIn = async (req, res) => {
             status: 'Present'
         });
 
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('dashboardUpdate', { type: 'attendance', action: 'checkin', data: attendance });
+        }
+
         res.status(201).json(attendance);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -55,6 +60,12 @@ exports.checkOut = async (req, res) => {
         attendance.workingHours = (diffInMs / (1000 * 60 * 60)).toFixed(2); 
 
         await attendance.save();
+
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('dashboardUpdate', { type: 'attendance', action: 'checkout', data: attendance });
+        }
+
         res.json(attendance);
     } catch (error) {
         res.status(500).json({ message: error.message });

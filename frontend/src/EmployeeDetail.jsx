@@ -17,7 +17,7 @@ function EmployeeDetail() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const emp = allEmployees.find(e => e.id === parseInt(id))
-  const [currentView, setCurrentView] = useState('manager')
+  const currentView = user?.role === 'manager' || user?.role === 'admin' ? 'manager' : 'employee'
   const [confirm, setConfirm] = useState(false)
   const [deactivated, setDeactivated] = useState(false)
 
@@ -86,18 +86,9 @@ function EmployeeDetail() {
         {/* Header */}
         <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <div className="flex gap-2">
-            <button
-              onClick={() => setCurrentView('manager')}
-              className={`px-4 py-1.5 text-sm font-medium rounded-md shadow-sm transition ${
-                currentView === 'manager' ? 'bg-[#1e293b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >Manager View</button>
-            <button
-              onClick={() => setCurrentView('employee')}
-              className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${
-                currentView === 'employee' ? 'bg-[#1e293b] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >Employee View</button>
+            <span className="px-4 py-1.5 text-sm font-medium rounded-md shadow-sm transition bg-[#1e293b] text-white">
+              {currentView === 'manager' ? 'Manager View' : 'Employee View'}
+            </span>
           </div>
           <div className="w-9 h-9 bg-indigo-900 text-white flex items-center justify-center rounded-full font-bold shadow-sm uppercase">
             {user?.name?.[0] || user?.email?.[0] || 'A'}

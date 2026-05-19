@@ -27,6 +27,11 @@ exports.requestLeave = async (req, res) => {
             reason
         });
 
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('dashboardUpdate', { type: 'leave', action: 'request', data: leave });
+        }
+
         res.status(201).json({ message: 'Leave request submitted', leave });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -56,6 +61,11 @@ exports.updateLeaveStatus = async (req, res) => {
         leave.status = status;
         leave.approvedBy = req.user.id;
         await leave.save();
+
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('dashboardUpdate', { type: 'leave', action: 'status_update', data: leave });
+        }
 
         res.json({ message: `Leave ${status}`, leave });
     } catch (error) {
