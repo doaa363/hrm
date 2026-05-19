@@ -114,39 +114,43 @@ function Dashboard() {
 
         {/* Stats Cards */}
         <section className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-400">Total Employees</p>
-              <h3 className="text-3xl font-bold text-gray-800 mt-2">150</h3>
-              <p className="text-xs text-green-500 font-medium mt-1">↑ 5+ this month</p>
+          {currentView === 'manager' && (
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Total Employees</p>
+                <h3 className="text-3xl font-bold text-gray-800 mt-2">150</h3>
+                <p className="text-xs text-green-500 font-medium mt-1">↑ 5+ this month</p>
+              </div>
+              <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><Users size={24} /></div>
             </div>
-            <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><Users size={24} /></div>
-          </div>
+          )}
 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-400">Today's Attendance</p>
-              <h3 className="text-3xl font-bold text-gray-800 mt-2">142</h3>
-              <p className="text-xs text-green-500 font-medium mt-1">↑ 94.6%</p>
+              <p className="text-sm font-medium text-gray-400">{currentView === 'manager' ? "Today's Attendance" : "My Attendance Rate"}</p>
+              <h3 className="text-3xl font-bold text-gray-800 mt-2">{currentView === 'manager' ? "142" : "96%"}</h3>
+              <p className="text-xs text-green-500 font-medium mt-1">↑ {currentView === 'manager' ? "94.6%" : "Excellent"}</p>
             </div>
             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><CheckCircle2 size={24} /></div>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-400">Pending Leave Requests</p>
-              <h3 className="text-3xl font-bold text-gray-800 mt-2">8</h3>
+              <p className="text-sm font-medium text-gray-400">{currentView === 'manager' ? "Pending Leave Requests" : "Available Leave"}</p>
+              <h3 className="text-3xl font-bold text-gray-800 mt-2">{currentView === 'manager' ? "8" : "18 Days"}</h3>
             </div>
             <div className="p-3 bg-cyan-50 text-cyan-600 rounded-xl"><Clock size={24} /></div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-400">Monthly Reports</p>
-              <h3 className="text-3xl font-bold text-gray-800 mt-2">24</h3>
+          {currentView === 'manager' && (
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-400">Monthly Reports</p>
+                <h3 className="text-3xl font-bold text-gray-800 mt-2">24</h3>
+              </div>
+              <div className="p-3 bg-amber-50 text-amber-600 rounded-xl"><FileText size={24} /></div>
             </div>
-            <div className="p-3 bg-amber-50 text-amber-600 rounded-xl"><FileText size={24} /></div>
-          </div>
+          )}
         </section>
 
         {/* Attendance Chart + Leave Requests */}
@@ -172,35 +176,37 @@ function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h4 className="text-base font-bold text-gray-800 mb-6">Pending Leave Requests</h4>
-            <div className="space-y-4">
-              <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-800 text-sm">Ahmed Mohamed</span>
-                  <span className="text-xs px-2.5 py-0.5 bg-amber-50 text-amber-600 border border-amber-200 rounded-full">Pending</span>
+          {currentView === 'manager' && (
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h4 className="text-base font-bold text-gray-800 mb-6">Pending Leave Requests</h4>
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-gray-800 text-sm">Ahmed Mohamed</span>
+                    <span className="text-xs px-2.5 py-0.5 bg-amber-50 text-amber-600 border border-amber-200 rounded-full">Pending</span>
+                  </div>
+                  <p className="text-xs text-gray-500">Annual Leave</p>
+                  <p className="text-[11px] text-gray-400">05-05-2026 to 10-05-2026</p>
                 </div>
-                <p className="text-xs text-gray-500">Annual Leave</p>
-                <p className="text-[11px] text-gray-400">05-05-2026 to 10-05-2026</p>
-              </div>
-              <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-800 text-sm">Fatima Ali</span>
-                  <span className="text-xs px-2.5 py-0.5 bg-green-50 text-green-600 border border-green-200 rounded-full">Approved</span>
+                <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-gray-800 text-sm">Fatima Ali</span>
+                    <span className="text-xs px-2.5 py-0.5 bg-green-50 text-green-600 border border-green-200 rounded-full">Approved</span>
+                  </div>
+                  <p className="text-xs text-gray-500">Sick Leave</p>
+                  <p className="text-[11px] text-gray-400">03-05-2026 to 04-05-2026</p>
                 </div>
-                <p className="text-xs text-gray-500">Sick Leave</p>
-                <p className="text-[11px] text-gray-400">03-05-2026 to 04-05-2026</p>
-              </div>
-              <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-gray-800 text-sm">Mahmoud Hassan</span>
-                  <span className="text-xs px-2.5 py-0.5 bg-amber-50 text-amber-600 border border-amber-200 rounded-full">Pending</span>
+                <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl space-y-1">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-gray-800 text-sm">Mahmoud Hassan</span>
+                    <span className="text-xs px-2.5 py-0.5 bg-amber-50 text-amber-600 border border-amber-200 rounded-full">Pending</span>
+                  </div>
+                  <p className="text-xs text-gray-500">Casual Leave</p>
+                  <p className="text-[11px] text-gray-400">07-05-2026 to 07-05-2026</p>
                 </div>
-                <p className="text-xs text-gray-500">Casual Leave</p>
-                <p className="text-[11px] text-gray-400">07-05-2026 to 07-05-2026</p>
               </div>
             </div>
-          </div>
+          )}
         </section>
 
         {/* Productivity + Leave Types */}

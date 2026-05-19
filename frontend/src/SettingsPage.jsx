@@ -78,10 +78,19 @@ function SettingsPage() {
   const [profile, setProfile] = useState({ name: 'Admin User', email: 'admin@company.com', phone: '+966 50 000 0000', jobRole: 'Admin' })
   const [saved, setSaved] = useState(false)
 
+  const [sysPrefs, setSysPrefs] = useState({ language: 'Arabic', timezone: 'UTC+2 (Cairo)', dateFormat: 'MM-DD-YYYY' })
+  const [sysSaved, setSysSaved] = useState(false)
+
   const handleSave = (e) => {
     e.preventDefault()
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
+  }
+
+  const handleSysSave = (e) => {
+    e.preventDefault()
+    setSysSaved(true)
+    setTimeout(() => setSysSaved(false), 2500)
   }
 
   const employeeTabs = [
@@ -262,17 +271,25 @@ function SettingsPage() {
             {activeTab === 'system' && (
               <div>
                 <h3 className="text-base font-bold text-gray-800 mb-6">System Preferences</h3>
-                <div className="space-y-4 max-w-md">
+                <form onSubmit={handleSysSave} className="space-y-4 max-w-md">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Language</label>
-                    <select className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 outline-none">
+                    <select
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 outline-none"
+                      value={sysPrefs.language}
+                      onChange={(e) => setSysPrefs({ ...sysPrefs, language: e.target.value })}
+                    >
                       <option>English</option>
                       <option>Arabic</option>
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Timezone</label>
-                    <select className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 outline-none">
+                    <select
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 outline-none"
+                      value={sysPrefs.timezone}
+                      onChange={(e) => setSysPrefs({ ...sysPrefs, timezone: e.target.value })}
+                    >
                       <option>UTC+3 (Riyadh)</option>
                       <option>UTC+2 (Cairo)</option>
                       <option>UTC+0 (London)</option>
@@ -280,14 +297,21 @@ function SettingsPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Date Format</label>
-                    <select className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 outline-none">
+                    <select
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 outline-none"
+                      value={sysPrefs.dateFormat}
+                      onChange={(e) => setSysPrefs({ ...sysPrefs, dateFormat: e.target.value })}
+                    >
                       <option>DD-MM-YYYY</option>
                       <option>MM-DD-YYYY</option>
                       <option>YYYY-MM-DD</option>
                     </select>
                   </div>
-                  <button className="px-5 py-2.5 bg-[#1e293b] hover:bg-slate-800 text-white text-sm font-medium rounded-lg transition">Save Preferences</button>
-                </div>
+                  <div className="flex items-center gap-3 mt-6">
+                    <button type="submit" className="px-5 py-2.5 bg-[#1e293b] hover:bg-slate-800 text-white text-sm font-medium rounded-lg transition">Save Preferences</button>
+                    {sysSaved && <span className="text-sm text-emerald-600 font-medium">✓ Saved successfully</span>}
+                  </div>
+                </form>
               </div>
             )}
 
