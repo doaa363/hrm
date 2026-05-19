@@ -10,6 +10,7 @@ import Attendance from './Attendance.jsx'
 import SettingsPage from './SettingsPage.jsx'
 import Reports from './Reports.jsx'
 import EmployeeDetail from './EmployeeDetail.jsx'
+import ProfilePage from './ProfilePage.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

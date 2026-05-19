@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { LayoutDashboard, Users, Calendar, FileText, Settings, LogOut, HelpCircle, User, Lock, Bell, Globe, Shield, ChevronRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from './context/AuthContext.jsx'
+import Sidebar from './components/Sidebar.jsx'
 
 function ChangePassword() {
   const [form, setForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
@@ -75,11 +76,22 @@ function SettingsPage() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('profile')
   const currentView = user?.role === 'manager' || user?.role === 'admin' ? 'manager' : 'employee'
-  const [profile, setProfile] = useState({ name: 'Admin User', email: 'admin@company.com', phone: '+966 50 000 0000', jobRole: 'Admin' })
+  const [profile, setProfile] = useState({ name: '', email: '', phone: '', jobRole: '' })
   const [saved, setSaved] = useState(false)
 
   const [sysPrefs, setSysPrefs] = useState({ language: 'Arabic', timezone: 'UTC+2 (Cairo)', dateFormat: 'MM-DD-YYYY' })
   const [sysSaved, setSysSaved] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        name: user.name || 'Employee User',
+        email: user.email || 'employee@company.com',
+        phone: user.phone || '+966 50 123 4567',
+        jobRole: user.role === 'admin' ? 'Admin' : user.role === 'manager' ? 'Manager' : 'Employee'
+      })
+    }
+  }, [user])
 
   const handleSave = (e) => {
     e.preventDefault()
@@ -112,40 +124,7 @@ function SettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex font-sans">
 
-      {/* Sidebar */}
-      <aside className="w-64 bg-[#1e293b] text-white flex flex-col justify-between p-4 shadow-xl z-10 sticky top-0 h-screen">
-        <div>
-          <div className="text-center py-6 border-b border-gray-700 mb-6">
-            <h1 className="text-xl font-bold tracking-wide">HR Management</h1>
-            <h1 className="text-xl font-bold tracking-wide text-cyan-400 mt-1">System</h1>
-          </div>
-          <nav className="space-y-2">
-            <button onClick={() => navigate('/dashboard')} className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition">
-              <LayoutDashboard size={20} /><span>Dashboard</span>
-            </button>
-            <button onClick={() => navigate('/employees')} className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition">
-              <Users size={20} /><span>Employees</span>
-            </button>
-            <button onClick={() => navigate('/attendance')} className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition">
-              <Calendar size={20} /><span>Attendance</span>
-            </button>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition">
-              <FileText size={20} /><span>Reports</span>
-            </a>
-            <button className="w-full flex items-center gap-3 px-4 py-3 bg-cyan-600 rounded-lg text-white font-medium transition">
-              <Settings size={20} /><span>Settings</span>
-            </button>
-          </nav>
-        </div>
-        <div className="border-t border-gray-700 pt-4 space-y-2">
-          <button onClick={() => { localStorage.removeItem('token'); navigate('/') }} className="w-full flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition">
-            <LogOut size={20} /><span>Logout</span>
-          </button>
-          <div className="flex justify-end text-gray-500 hover:text-gray-300 cursor-pointer">
-            <HelpCircle size={20} />
-          </div>
-        </div>
-      </aside>
+      <Sidebar active="settings" />
 
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto">

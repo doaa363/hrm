@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext.jsx'
 import { TableSkeleton } from './components/Skeleton.jsx'
 import socket from './utils/socket.js'
+import Sidebar from './components/Sidebar.jsx'
 
 function Employees() {
   const navigate = useNavigate()
@@ -59,48 +60,7 @@ function Employees() {
   return (
     <div className="min-h-screen bg-gray-50 flex font-sans">
 
-      {/* Sidebar */}
-      <aside className="w-64 bg-[#1e293b] text-white flex flex-col justify-between p-4 shadow-xl z-10">
-        <div>
-          <div className="text-center py-6 border-b border-gray-700 mb-6">
-            <h1 className="text-xl font-bold tracking-wide">HR Management</h1>
-            <h1 className="text-xl font-bold tracking-wide text-cyan-400 mt-1">System</h1>
-          </div>
-
-          <nav className="space-y-2">
-            <button onClick={() => navigate('/dashboard')} className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition">
-              <LayoutDashboard size={20} />
-              <span>Dashboard</span>
-            </button>
-            <button className="w-full flex items-center gap-3 px-4 py-3 bg-cyan-600 rounded-lg text-white font-medium transition">
-              <Users size={20} />
-              <span>Employees</span>
-            </button>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition" onClick={() => navigate('/attendance')}>
-              <Calendar size={20} />
-              <span>Attendance</span>
-            </a>
-            <button onClick={() => navigate('/reports')} className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition">
-              <FileText size={20} />
-              <span>Reports</span>
-            </button>
-            <button onClick={() => navigate('/settings')} className="w-full flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition">
-              <Settings size={20} />
-              <span>Settings</span>
-            </button>
-          </nav>
-        </div>
-
-        <div className="border-t border-gray-700 pt-4 space-y-2">
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition">
-            <LogOut size={20} />
-            <span>Logout</span>
-          </button>
-          <div className="flex justify-end text-gray-500 hover:text-gray-300 cursor-pointer">
-            <HelpCircle size={20} />
-          </div>
-        </div>
-      </aside>
+      <Sidebar active="employees" />
 
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto">
