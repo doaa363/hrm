@@ -12,6 +12,7 @@ import Reports from './Reports.jsx'
 import EmployeeDetail from './EmployeeDetail.jsx'
 import ProfilePage from './ProfilePage.jsx'
 import AuditLogsPage from './AuditLogsPage.jsx'
+import Chatbot from './components/Chatbot.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -30,6 +31,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/audit-logs" element={<AuditLogsPage />} />
         </Routes>
+        {/* Floating AI Chatbot — visible on every page */}
+        <Chatbot />
       </BrowserRouter>
     </AuthProvider>
   </React.StrictMode>,

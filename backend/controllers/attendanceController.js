@@ -1,7 +1,7 @@
 const Attendance = require('../models/Attendance');
 exports.checkIn = async (req, res) => {
     try {
-        const today = new Date().toISOString().split('T')[0];ل
+        const today = new Date().toISOString().split('T')[0];
         const existingRecord = await Attendance.findOne({
             employee: req.user.id,
             date: today
