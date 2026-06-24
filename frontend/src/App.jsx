@@ -1,56 +1,35 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, Link, Outlet } from 'react-router-dom';
-import { Users } from 'lucide-react';
-import { useAuth, AuthProvider } from './context/AuthContext.jsx'; // Ensure AuthProvider is imported
+import React, { useState } from 'react'
+import axios from 'axios'
+import { Navigate, useNavigate, Link } from 'react-router-dom'
+import { Users } from 'lucide-react'
+import { useAuth } from './context/AuthContext.jsx'
 
-/**
- * 1. Protected Route Wrapper
- * This component checks if the user is authenticated. 
- * If not, it redirects to the login page.
- */
-const ProtectedRoute = () => {
-  const { token } = useAuth(); // Assuming your AuthContext provides the token
+function App() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
+  const navigate = useNavigate()
+  const { login, user } = useAuth()
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <Outlet />; // Renders the child routes (Dashboard, etc.)
-};
-
-/**
- * 2. Login Component
- * (Your original code moved into a component)
- */
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
-  const { login, token } = useAuth();
-
-  // If already logged in, don't show login page, go to dashboard
-  if (token) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to="/dashboard" replace />
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setMessage('');
+    e.preventDefault()
+    setError('')
+    setMessage('')
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      login(response.data.token);
-      setMessage('Login Successful! Redirecting...');
-      setTimeout(() => navigate('/dashboard'), 500);
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password })
+      login(response.data.token)
+      setMessage('Login Successful! Redirecting...')
+      setTimeout(() => navigate('/dashboard'), 500)
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong. Please try again.');
+      setError(err.response?.data?.message || 'Something went wrong. Please try again.')
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex font-sans">
-      {/* Left Panel */}
       <div className="hidden lg:flex w-1/2 bg-[#1e293b] flex-col items-center justify-center p-12 text-white">
         <div className="text-center">
           <div className="w-16 h-16 bg-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
@@ -77,7 +56,6 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right Panel */}
       <div className="flex-1 bg-gray-50 flex items-center justify-center p-8">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           <div className="mb-8">
@@ -126,33 +104,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-/**
- * 3. Main App Component
- * Handles the Routing logic
- */
-function App() {
-  return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<div>Register Page (To be implemented)</div>} />
-
-        {/* Protected Routes - These require login */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<div>Welcome to the Dashboard! (Protected)</div>} />
-          <Route path="/attendance" element={<div>Attendance Tracking (Protected)</div>} />
-          {/* Add more protected routes here */}
-        </Route>
-
-        {/* Redirect any unknown route to login or dashboard */}
-        <Route path="*" element={<Navigate replace to="/dashboard" />} />
-      </Routes>
-    </Router>
-  );
+  )
 }
 
-export default App;
+export default App

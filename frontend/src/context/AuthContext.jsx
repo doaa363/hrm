@@ -1,26 +1,38 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
+
 const AuthContext = createContext(null)
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [token, setToken] = useState(localStorage.getItem('token'))
+
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      try { setUser(jwtDecode(token)) }
-      catch { localStorage.removeItem('token') }
+    const stored = localStorage.getItem('token')
+    if (stored) {
+      try {
+        setUser(jwtDecode(stored))
+        setToken(stored)
+      } catch {
+        localStorage.removeItem('token')
+      }
     }
   }, [])
-  const login = (token) => {
-    localStorage.setItem('token', token)
-    setUser(jwtDecode(token))
+
+  const login = (newToken) => {
+    localStorage.setItem('token', newToken)
+    setToken(newToken)
+    setUser(jwtDecode(newToken))
   }
+
   const logout = () => {
     localStorage.removeItem('token')
+    setToken(null)
     setUser(null)
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
