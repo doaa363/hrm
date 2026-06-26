@@ -193,7 +193,6 @@ const Chatbot = () => {
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
         )}
-        {!isOpen && <span style={styles.badge}>AI</span>}
       </button>
 
       {/* Chat Window */}
@@ -337,8 +336,8 @@ const Chatbot = () => {
 const styles = {
   floatBtn: {
     position: 'fixed',
-    bottom: 28,
-    right: 28,
+    bottom: 64,
+    left: 'calc(280px + 16in)',
     width: 58,
     height: 58,
     borderRadius: '50%',
@@ -367,8 +366,9 @@ const styles = {
   },
   window: {
     position: 'fixed',
-    bottom: 100,
-    right: 28,
+    bottom: 136,
+    left: 'calc(280px + 16in)',
+    right: 'auto',
     width: 360,
     maxHeight: 580,
     background: '#0f172a',

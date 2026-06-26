@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext.jsx'
 import socket from './utils/socket.js'
 import { CardSkeleton, ChartSkeleton } from './components/Skeleton.jsx'
 import Sidebar from './components/Sidebar.jsx'
+import PageLayout from './components/PageLayout.jsx'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -73,12 +74,9 @@ function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans">
-
+    <PageLayout>
       <Sidebar active="dashboard" />
-
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="p-8">
 
         {/* Header */}
         <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
@@ -251,7 +249,7 @@ function Dashboard() {
           </section>
         )}
       </main>
-    </div>
+    </PageLayout>
   )
 }
 

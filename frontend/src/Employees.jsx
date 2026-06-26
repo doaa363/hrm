@@ -5,6 +5,7 @@ import { useAuth } from './context/AuthContext.jsx'
 import { TableSkeleton } from './components/Skeleton.jsx'
 import socket from './utils/socket.js'
 import Sidebar from './components/Sidebar.jsx'
+import PageLayout from './components/PageLayout.jsx'
 
 function Employees() {
   const navigate = useNavigate()
@@ -58,12 +59,9 @@ function Employees() {
   })
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans">
-
+    <PageLayout>
       <Sidebar active="employees" />
-
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="p-8">
 
         {/* Header */}
         <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
@@ -190,8 +188,11 @@ function Employees() {
           </div>
         )}
       </main>
+    </PageLayout>
+  )
+}
 
-      {/* Add Employee Modal */}
+export default Employees
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg">
@@ -255,7 +256,7 @@ function Employees() {
         </div>
       )}
     </div>
-  )
-}
+  
+
 
 export default Employees

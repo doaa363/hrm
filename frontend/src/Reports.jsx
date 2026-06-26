@@ -4,6 +4,7 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, R
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext.jsx'
 import Sidebar from './components/Sidebar.jsx'
+import PageLayout from './components/PageLayout.jsx'
 
 function Reports() {
   const navigate = useNavigate()
@@ -77,12 +78,9 @@ function Reports() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans">
-
+    <PageLayout>
       <Sidebar active="reports" />
-
-      {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="p-8">
 
         {/* Header */}
         <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
@@ -214,8 +212,6 @@ function Reports() {
           </>
         )}
       </main>
-    </div>
+    </PageLayout>
   )
 }
-
-export default Reports

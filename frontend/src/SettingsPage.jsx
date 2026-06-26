@@ -122,12 +122,12 @@ function SettingsPage() {
   const tabs = currentView === 'manager' ? managerTabs : employeeTabs
 
   return (
-    <div className="min-h-screen bg-gray-50 flex font-sans">
+    <div className="min-h-screen bg-gray-50 font-sans">
 
       <Sidebar active="settings" />
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="ml-64 p-8 overflow-y-auto min-h-screen">
 
         {/* Header */}
         <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">

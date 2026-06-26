@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.jsx'
+import { SidebarProvider } from './context/SidebarContext.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import App from './App.jsx'
 import Register from './Register.jsx'
@@ -14,11 +15,18 @@ import EmployeeDetail from './EmployeeDetail.jsx'
 import ProfilePage from './ProfilePage.jsx'
 import AuditLogsPage from './AuditLogsPage.jsx'
 import Chatbot from './components/Chatbot.jsx'
+import { useAuth } from './context/AuthContext.jsx'
 import './index.css'
+
+const ProtectedChatbot = () => {
+  const { token } = useAuth()
+  return token ? <Chatbot /> : null
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
+      <SidebarProvider>
       <BrowserRouter>
         <Routes>
           {/* Public */}
@@ -40,9 +48,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
 
-        {/* Floating AI Chatbot — visible on every page */}
-        <Chatbot />
+        {/* Floating AI Chatbot — only for logged-in users */}
+        <ProtectedChatbot />
       </BrowserRouter>
+      </SidebarProvider>
     </AuthProvider>
   </React.StrictMode>,
 )
